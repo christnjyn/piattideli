@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piatti Deliziosi</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      margin: 0 auto;
+      max-width: 1200px;
+      padding: 20px;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      background-color: #FF6F61;
+      color: white;
+      padding: 10px 20px;
+    }
+
+    .navbar ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar ul li {
+      margin: 0 15px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .navbar ul li:hover {
+      text-decoration: underline;
+    }
+
+    .navbar ul li .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; background: #FF6F61; padding: 10px; border-radius: 5px; list-style: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+    
+    .navbar ul li:hover .dropdown-menu { display: block; }
+    
+    .navbar ul li .dropdown-menu li { margin: 5px 0; color: white; cursor: pointer; }
+    
+    .navbar ul li .dropdown-menu li:hover { text-decoration: underline; }
+
+    .search-bar {
+      margin-left: auto;
+    }
+
+    .search-bar input {
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    /* Main Content */
+    #main-content {
+      display: flex;
+      margin-top: 20px;
+    }
+
+    /* Spotlight Featured Posts */
+    #spotlight-posts {
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    #spotlight-posts h2 {
+      margin-top: 0;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+
+    .featured-post {
+      border: 1px solid #7D9A6D;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    #spotlight-posts .featured-post img {
+      max-width: 100%;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    /* Community Posts */
+    #community-posts {
+      flex: 3;
+      margin-right: 20px;
+    }
+
+    #community-posts h2 {
+      margin-top: 0;
+      background: #f4f4f4;
+      padding: 10px;
+    }
+
+    #community-posts .post {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+    }
+
+    #community-posts .post img {
+      max-width: 100%;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    /* Suggested Recipes */
+    #suggested-recipes {
+      flex: 1;
+    }
+
+    #suggested-recipes h2 {
+      margin-top: 0;
+      background: #f4f4f4;
+      padding: 10px;
+    }
+
+    #suggested-recipes .suggestion {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    #suggested-recipes img {
+      width: 100px;
+      height: 100px;
+      margin-right: 10px;
+      border-radius: 5px;
+    }
+
+    /* Recipe Form */
+    #post-recipe {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    #post-recipe input,
+    #post-recipe textarea,
+    #post-recipe select,
+    #post-recipe button {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    #post-recipe button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+    }
+
+    #post-recipe button:hover {
+      background-color: #0056b3;
+    }
+
+    .user-name {
+      font-weight: bold;
+    }
+
+    .like-comment {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .like-comment button {
+      margin-right: 10px;
+    }
+
+    .save-post {
+      margin-top: 10px;
+      cursor: pointer;
+      color: #007BFF;
+      text-decoration: underline;
+    }
+
+    .comment-section {
+      margin-top: 10px;
+    }
+
+    /* Spotlight Section Styling */
+    #spotlight-posts h2 {
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <ul>
+	Home
+	<li><a href="index.html"></a></li>
+      <li><a href="#saved-posts">Saved</a></li>
+	<li><a href="about.html">About Us</a></li>
+	 <li>
+        Recipes
+        <ul class="dropdown-menu">
+          <li class="category" data-category="breakfast" onclick="filterPosts('breakfast')">Breakfast</li>
+          <li class="category" data-category="lunch" onclick="filterPosts('lunch')">Lunch</li>
+          <li class="category" data-category="dinner" onclick="filterPosts('dinner')">Dinner</li>
+          <li class="category" data-category="appetizers" onclick="filterPosts('appetizers')">Appetizers</li>
+          <li class="category" data-category="desserts" onclick="filterPosts('desserts')">Desserts</li>
+	  <li class="category" data-category="tips" onclick="filterPosts('tips')">Tips</li>
+      </li>
+     </li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div id="main-content">
+      <!-- Spotlight Featured Posts -->
+      <section id="spotlight-posts">
+        <h2>Featured Posts</h2>
+        <div class="featured-post">
+          <img src="https://via.placeholder.com/300" alt="Featured Dish">
+          <h3 id="featured-title">Featured Dish</h3>
+        </div>
+      </section>
+
+      <!-- Community Posts -->
+      <section id="community-posts">
+        <h2>Community Posts</h2>
+        <!-- Posts will be dynamically inserted here -->
+      </section>
+
+      <!-- Suggested Recipes -->
+      <aside id="suggested-recipes">
+        <h2>Suggested Recipes</h2>
+        <!-- Suggested Recipes will be dynamically inserted here -->
+      </aside>
+    </div>
+
+    <!-- Saved Posts -->
+    <section id="saved-posts" style="display:none;">
+      <h2>Your Saved Posts</h2>
+      <div id="saved-posts-list"></div>
+    </section>
+
+    <!-- Post Recipe -->
+    <section id="post-recipe">
+      <h2>Post Your Recipe</h2>
+      <select id="post-type">
+        <option value="recipe">Recipe</option>
+        <option value="tip">Tip</option>
+      </select>
+      <div id="recipe-category">
+        <select id="recipe-category-select">
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+          <option value="appetizers">Appetizers</option>
+          <option value="desserts">Desserts</option>
+      	  <option value="tips">tips</option>
+        </select>
+      </div>
+      <input type="text" id="recipe-title" placeholder="Recipe Title" required>
+      <input type="text" id="user-name" placeholder="Your Name" required>
+      <textarea id="recipe-description" placeholder="Recipe Description" rows="4" required></textarea>
+      <input type="file" id="recipe-image" accept="image/*" placeholder="Share a photo (optional)">
+      <button id="submit-recipe">Submit Recipe</button>
+    </section>
+  </div>
+
+  <script>
+    const communityPosts = document.getElementById('community-posts');
+    const spotlightPosts = document.getElementById('spotlight-posts');
+    const featuredTitle = document.getElementById('featured-title');
+    const savedPostsList = document.getElementById('saved-posts-list');
+    const savedPostsSection = document.getElementById('saved-posts');
+    const suggestedRecipes = document.getElementById('suggested-recipes');
+    
+    let posts = [];
+    let savedPosts = [];
+
+    // Function to display posts
+    function displayPosts(filteredCategory = null) {
+      communityPosts.innerHTML = '';
+      const filteredPosts = filteredCategory ? posts.filter(post => post.category === filteredCategory) : posts;
+      filteredPosts.forEach((post, index) => {
+        const postElement = document.createElement('div');
+        postElement.classList.add('post');
+        const imgElement = post.image ? `<img src="${URL.createObjectURL(post.image)}" alt="${post.title}">` : '';
+        postElement.innerHTML = `
+          <h3>${post.title}</h3>
+          <p class="user-name">${post.userName}</p>
+          ${imgElement}
+          <p>${post.description}</p>
+          <div class="like-comment">
+            <button onclick="likePost(${index})">Like</button>
+            <span class="likes-count">${post.likes || 0} Likes</span>
+            <button onclick="addComment(${index})">Comment</button>
+          </div>
+          <div class="comment-section" id="comments-${index}"></div>
+          <div class="save-post" onclick="savePost('${post.title}')">Save</div>
+        `;
+        communityPosts.appendChild(postElement);
+      });
+      updateFeaturedPost();
+      updateSuggestedRecipes();
+    }
+
+    // Function to filter posts by category
+    function filterPosts(category) {
+      displayPosts(category);
+    }
+
+    // Function to like a post
+    function likePost(index) {
+      posts[index].likes = (posts[index].likes || 0) + 1;
+      displayPosts();
+    }
+
+    // Function to update the featured post
+    function updateFeaturedPost() {
+      const mostLikedPost = posts.reduce((prev, current) => {
+        return (prev.likes || 0) > (current.likes || 0) ? prev : current;
+      }, {});
+
+      if (mostLikedPost.likes > 0) {
+        featuredTitle.textContent = mostLikedPost.title;
+        const featuredImg = document.querySelector('.featured-post img');
+        if (mostLikedPost.image) {
+          featuredImg.src = URL.createObjectURL(mostLikedPost.image);
+        }
+      } else {
+        featuredTitle.textContent = "Featured Dish Name";
+        document.querySelector('.featured-post img').src = "https://via.placeholder.com/300";
+      }
+    }
+
+    // Function to update suggested recipes
+    function updateSuggestedRecipes() {
+      suggestedRecipes.innerHTML = '';
+      const randomPosts = getRandomPosts(3);
+      randomPosts.forEach(post => {
+        const suggestionElement = document.createElement('div');
+        suggestionElement.classList.add('suggestion');
+        const imgElement = post.image ? `<img src="${URL.createObjectURL(post.image)}" alt="${post.title}">` : '';
+        suggestionElement.innerHTML = `
+          ${imgElement}
+          <div>
+            <h4>${post.title}</h4>
+            <p class="user-name">${post.userName}</p>
+          </div>
+        `;
+        suggestedRecipes.appendChild(suggestionElement);
+      });
+    }
+
+    // Function to get random posts
+    function getRandomPosts(count) {
+      const shuffledPosts = posts.sort(() => 0.5 - Math.random());
+      return shuffledPosts.slice(0, count);
+    }
+
+    // Function to add a comment to a post via alert
+    function addComment(index) {
+      const userName = prompt("Enter your name:");
+      const commentText = prompt("Enter your comment:");
+      if (userName && commentText) {
+        const commentsContainer = document.getElementById(`comments-${index}`);
+        const commentElement = document.createElement('p');
+        commentElement.textContent = `${userName}: ${commentText}`;
+        commentsContainer.appendChild(commentElement);
+      }
+    }
+
+    // Function to submit a new recipe
+    document.getElementById('submit-recipe').addEventListener('click', function () {
+      const title = document.getElementById('recipe-title').value;
+      const userName = document.getElementById('user-name').value;
+      const description = document.getElementById('recipe-description').value;
+      const category = document.getElementById('recipe-category-select').value;
+      const imageInput = document.getElementById('recipe-image');
+      const imageFile = imageInput.files[0];
+
+      if (title && userName && description) {
+        const newPost = { title, userName, description, category, image: imageFile, likes: 0 };
+        posts.push(newPost);
+        displayPosts();
+        resetForm();
+      }
+    });
+
+    // Function to reset the form
+    function resetForm() {
+      document.getElementById('recipe-title').value = '';
+      document.getElementById('user-name').value = '';
+      document.getElementById('recipe-description').value = '';
+      document.getElementById('recipe-image').value = '';
+      document.getElementById('recipe-category').style.display = 'block'; // Reset visibility
+    }
+
+    // Function to save a post
+    function savePost(title) {
+      const postToSave = posts.find(post => post.title === title);
+      if (postToSave && !savedPosts.includes(postToSave)) {
+        savedPosts.push(postToSave);
+        displaySavedPosts();
+      }
+    }
+
+    // Function to display saved posts
+    function displaySavedPosts() {
+      savedPostsList.innerHTML = '';
+      savedPosts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.innerHTML = `<h3>${post.title}</h3>`;
+        savedPostsList.appendChild(postElement);
+      });
+      savedPostsSection.style.display = savedPosts.length ? 'block' : 'none';
+    }
+
+    // Add event listener for post type selection
+    document.getElementById('post-type').addEventListener('change', function () {
+      const postType = this.value;
+      if (postType === 'recipe') {
+        document.getElementById('recipe-category').style.display = 'block';
+      } else {
+        document.getElementById('recipe-category').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
